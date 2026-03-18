@@ -1,6 +1,7 @@
 """
 Filename: laser.py
 Purpose: Handle all the laser functions
+Author: Amitai Ben Shalom
 """
 
 import serial
@@ -154,7 +155,7 @@ class Laser():
                     self.waiting_for_ack = False
                     self.last_time_sent_data = None
                 else:
-                    return "ACK"
+                    return "ERROR_UNEXPECTED_RESPONSE"
 
             elif time.time() - self.last_time_sent_data > ARDUINO_DRAWING_BATCH_TIMEOUT:
                 self.send_values("RESET")
@@ -172,10 +173,19 @@ class Laser():
         points = self.points if self.mode == "user_points" else self.frame_points
 
         if self.index >= len(points):
+            # D_DONE means finished drawing the points of the user (without frame), now start sending frame points
+            # F_DONE means finished all drawing (user points + frame), now start DC motor
             status = "D_DONE" if self.mode == "user_points" else "F_DONE"
             self.send_values(status)  # drawing done or frame done
 
-            if status == "F_DONE":
+            if status == "D_DONE":
+                self.mode = "frame_points"
+                self.index = 0
+            
+            elif status == "F_DONE":
+                total_time = f"{(time.time() - self.drawing_start_time):.1f}"
+                self.logger.error(f"Finished drawing in {total_time} seconds")
+                # finished drawing (user points + frame), now start DC motor
                 self.dc_motor_on = True
                 self.last_dc_motor_time = time.time()
 
@@ -207,40 +217,21 @@ class Laser():
 
     def check_on_laser(self):
         if not self.exist:
-            return "ERROR"
+            return "NO_ARDUINO"
         
         if not self.drawing:
-            return "NOT DRAWING"
+            return "NOT_DRAWING"
         
         try:
             status = self.get_status()
 
-            if status == "RESET":
-                self.logger.error("Error: Timeout waiting for Arduino. Stopping transmission.")
-                self.end_drawing()
-                return "DONE"
-            
-            if status == "ACK" or status == "DC_MOTOR":
-                return "DRAWING"
-            
-            if status == "D_DONE":  # finished drawing the points of the user (without frame)
-                self.mode = "frame_points"
-                self.index = 0
-                return "DRAWING"
-            
-            if status == "F_DONE":  # finished all drawing (user points + frame), dc motor is now on
-                total_time = f"{(time.time() - self.drawing_start_time):.1f}"
-                self.logger.error(f"Finished drawing in {total_time} seconds")
-                return "DRAWING"
-            
-            if status == "SUCCESS":  # finished drawing (user points + frame) and DC motor finished
-                self.end_drawing()
-                return "DONE"
+            if status in ["ERROR_UNEXPECTED_RESPONSE", "RESET", "SUCCESS"]:
+                return status
             
             return "DRAWING"
         
         except:
-            return "ERROR"
+            return "ERROR_ARDUINO_DISCONNECTED"
         
 
             

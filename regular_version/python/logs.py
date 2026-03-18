@@ -1,6 +1,7 @@
 """
 Filename: logs.py
 Purpose: Logging functions for the exhibit
+Author: Amitai Ben Shalom
 """
 
 import logging

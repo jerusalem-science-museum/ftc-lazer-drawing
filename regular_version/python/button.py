@@ -1,6 +1,7 @@
 """
 Filename: Button.py
 Purpose: Button class for creating buttons on the screen
+Author: Amitai Ben Shalom
 """
 
 import pygame

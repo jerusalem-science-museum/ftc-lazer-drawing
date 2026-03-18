@@ -1,6 +1,7 @@
 """
 Filename: asset_loader.py
 Purpose: Asset loading functions for the exhibit.
+Author: Amitai Ben Shalom
 """
 
 import os

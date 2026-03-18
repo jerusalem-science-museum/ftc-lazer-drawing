@@ -16,6 +16,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
+DARK_GREEN = (0, 155, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 GRAY = (180, 180, 180)
@@ -64,8 +65,17 @@ LASER_POWER = 255  # (0 <= x <= 255)
 FRAME_POWER = 255  # (0 <= x <= 255)
 LASER_OFF_RATE = 6
 LASER_ON_RATE = 6
-FRAME_RATE = 50 # for green/yellow paper
+FRAME_RATE = 50  # for green/yellow paper
 MAX_DC_MOTOR_TIME = 1.8  # seconds
 
 MM_PER_PULSE = [0.2, 0.2]  # mm per pulse for each motor
 LASER_BOARD_SIZE = [83.0, 83.0]  # size of the board in mm
+
+# on-screen messages
+ERROR_LASER_DISCONNECTED = "Laser disconnected! Reconnect it and restart program"
+ERROR_UNEXPECTED_ARDUINO_RESPONSE = "Unexpected response from Laser! Consider restarting program"
+REPEAT_MODE_ON_MESSAGE = "Repeat mode ON: The laser will draw the same drawing again, touch screen to stop"
+
+# homming values
+FORCE_HOMMING_AFTER_N_DRAWS = 50  # force homming after this many drawings (to prevent misalignment)
+HOMMING_TIME = 9  # seconds to wait for homming to finish
