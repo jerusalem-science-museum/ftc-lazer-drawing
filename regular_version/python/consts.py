@@ -74,7 +74,7 @@ LASER_BOARD_SIZE = [83.0, 83.0]  # size of the board in mm
 # on-screen messages
 ERROR_LASER_DISCONNECTED = "Laser disconnected! Reconnect it and restart program"
 ERROR_UNEXPECTED_ARDUINO_RESPONSE = "Unexpected response from Laser! Consider restarting program"
-REPEAT_MODE_ON_MESSAGE = "Repeat mode ON: The laser will draw the same drawing again, touch screen to stop"
+REPEAT_MODE_ON_MESSAGE = "Repeat mode ON: The laser will draw the same drawing again, touch screen to stop."
 
 # homming values
 FORCE_HOMMING_AFTER_N_DRAWS = 50  # force homming after this many drawings (to prevent misalignment)

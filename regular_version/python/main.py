@@ -41,8 +41,8 @@ def main():
                 running = False
 
             if event.type == KEYDOWN and event.key == K_r:
-                ui.repeat = not ui.repeat
-                ui.on_screen_message = REPEAT_MODE_ON_MESSAGE if ui.repeat else None
+                ui.repeat[0] = not ui.repeat[0]
+                ui.on_screen_message = REPEAT_MODE_ON_MESSAGE if ui.repeat[0] else None
 
             if event.type == KEYDOWN and event.key == K_h:
                 ui.homming()

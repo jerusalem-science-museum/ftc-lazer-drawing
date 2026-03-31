@@ -69,7 +69,7 @@ class Ui:
         self.empty_notification = [False, 0]  # if clicked on drawing with empty drawing, [1] = init time when showed notification
         self.homming_notification = [False, 0]  # if arduino is homming right now, [1] = init time when showed notification
         self.buttons_clicked_in_a_row = []  # for detecting hidden combos of button clicks (currently for homming)
-        self.repeat = False  # for testing laser multiple times automatcially (press R to turn on/off)
+        self.repeat = [False, 0]  # for testing laser multiple times automatcially (press R to turn on/off) - [1] = number of drawings already repeated.
         self.drawings_counter = 0  # counts how many times the laser drew - for homming after certain number of drawings (FORCE_HOMMING_AFTER_N_DRAWS)
 
         self.asset_loader = AssetLoader(ASSETS_DIR, PICTURES_TO_LOAD, self.view_port)
@@ -235,11 +235,11 @@ class Ui:
         self.points.clear()
 
     def repeat_mode_on(self):
-        self.repeat = True
+        self.repeat = [True, 0]
         self.on_screen_message = REPEAT_MODE_ON_MESSAGE
 
     def repeat_mode_off(self):
-        self.repeat = False
+        self.repeat = [False, 0]
         self.on_screen_message = None
 
     def homming(self, alert=True):
@@ -278,8 +278,7 @@ class Ui:
             return
         
         if alert_empty and len(self.points) == 0:
-            self.empty_notification[0] = True
-            self.empty_notification[1] = time.time() 
+            self.empty_notification = [True, time.time()] 
             self.logger.info("Clicked on print button with empty drawing, skipping")
             return
 
@@ -316,9 +315,11 @@ class Ui:
                         self.logger.error(f"Unexpected response from Arduino!!!: {response}")
                         self.arduino_error_message = ERROR_UNEXPECTED_ARDUINO_RESPONSE
 
-                if self.repeat:
+                if self.repeat[0]:
                     time.sleep(1)  # delay to make sure everything is stable
                     self.send_to_laser(save_image=False, alert_empty=False)
+                    self.on_screen_message = REPEAT_MODE_ON_MESSAGE + f" Completed: {self.repeat[1]}"
+                    self.repeat[1] += 1
 
             except:
                 self.arduino_error_message = ERROR_LASER_DISCONNECTED
