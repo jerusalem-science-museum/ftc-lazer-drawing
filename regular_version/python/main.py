@@ -41,7 +41,7 @@ def main():
                 running = False
 
             if event.type == KEYDOWN and event.key == K_r:
-                ui.repeat[0] = not ui.repeat[0]
+                ui.repeat = [not ui.repeat[0], 0]
                 ui.on_screen_message = REPEAT_MODE_ON_MESSAGE if ui.repeat[0] else None
 
             if event.type == KEYDOWN and event.key == K_h:
