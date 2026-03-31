@@ -165,7 +165,7 @@ class Ui:
                 self.homming_notification[0] = False
 
     def check_idle(self):
-        if time.time() - self.last_touch_idle > IDLE_TIME:
+        if time.time() - self.last_touch_idle > IDLE_TIME and not self.repeat[0]:
             self.points.clear()
             self.buttons_clicked_in_a_row.clear()
             self.last_touch_idle = time.time()
