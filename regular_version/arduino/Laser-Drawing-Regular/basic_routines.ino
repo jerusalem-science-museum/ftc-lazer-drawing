@@ -282,7 +282,7 @@ void init_drawing() {
   laser_power = LASER_ON_POWER;
   rate = LASER_OFF_RATE;
   is_destination_done = true;
-}
+}rh
 
 void init_params() {
   getting_params = true;
